@@ -1,0 +1,64 @@
+{% extends "nav.html" %}
+{% block content %}
+<style>
+  .auth-wrap {
+    min-height: calc(100vh - 64px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 40px 20px;
+  }
+  .auth-box { width: 100%; max-width: 400px; }
+  .form-group-sp { margin-bottom: 20px; }
+  .auth-heading { text-align: center; margin-bottom: 32px; }
+  .auth-icon {
+    width: 48px; height: 48px; border: 1.5px solid rgba(239,68,68,0.4);
+    border-radius: 10px; display: inline-flex; align-items: center;
+    justify-content: center; margin-bottom: 16px;
+  }
+  .auth-icon svg { width: 22px; height: 22px; stroke: var(--danger); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .auth-title { font-size: 26px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.5px; }
+  .auth-sub { color: var(--text-muted); font-size: 14px; }
+  .restrict-notice {
+    font-family: var(--mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--danger); background: var(--danger-dim);
+    border: 1px solid rgba(239,68,68,0.2);
+    padding: 8px 14px; border-radius: 6px; margin-bottom: 20px;
+    text-align: center;
+  }
+</style>
+
+<div class="auth-wrap">
+  <div class="auth-box fade-in">
+    <div class="auth-heading">
+      <div class="auth-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="auth-title">Admin Portal</div>
+      <div class="auth-sub">Restricted access — administrators only</div>
+    </div>
+
+    <div class="restrict-notice">Authorized Personnel Only</div>
+
+    {% for m in messages %}
+      <div class="alert-ccfd">{{ m }}</div>
+    {% endfor %}
+
+    <div class="ccfd-card">
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group-sp">
+          <label class="form-label-sm">Admin Username</label>
+          <input type="text" name="uname" class="form-control-ccfd" placeholder="admin" required>
+        </div>
+        <div class="form-group-sp">
+          <label class="form-label-sm">Password</label>
+          <input type="password" name="psw" class="form-control-ccfd" placeholder="Password" required>
+        </div>
+        <button type="submit" class="btn-ccfd btn-primary-ccfd" style="margin-top:8px; background:var(--danger);">
+          Access Dashboard
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

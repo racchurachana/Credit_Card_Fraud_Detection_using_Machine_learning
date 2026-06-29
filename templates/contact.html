@@ -1,0 +1,31 @@
+{% extends "nav.html" %}
+{% block content %}
+<div style="padding: 80px 60px; max-width: 800px; margin: 0 auto;">
+  <div class="fade-in">
+    <div style="font-family:var(--mono); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); margin-bottom:16px; display:flex; align-items:center; gap:10px;">
+      <span style="display:inline-block; width:20px; height:1px; background:var(--accent);"></span>
+      Contact
+    </div>
+    <h2 style="font-size:32px; font-weight:700; letter-spacing:-0.5px; margin-bottom:10px;">Get in Touch</h2>
+    <p style="color:var(--text-muted); margin-bottom:40px; font-size:15px;">Questions or feedback about the system? Send us a message.</p>
+    <div class="ccfd-card">
+      <form method="post">
+        {% csrf_token %}
+        <div style="margin-bottom:20px;">
+          <label class="form-label-sm">Your Name</label>
+          <input type="text" name="name" class="form-control-ccfd" placeholder="Full name" required>
+        </div>
+        <div style="margin-bottom:20px;">
+          <label class="form-label-sm">Email Address</label>
+          <input type="email" name="email" class="form-control-ccfd" placeholder="you@example.com" required>
+        </div>
+        <div style="margin-bottom:20px;">
+          <label class="form-label-sm">Message</label>
+          <textarea name="message" class="form-control-ccfd" rows="5" placeholder="Your message..." required style="resize:vertical;"></textarea>
+        </div>
+        <button type="submit" class="btn-ccfd btn-primary-ccfd">Send Message</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,206 @@
+{% extends "nav.html" %}
+{% block content %}
+<style>
+  .hero {
+    min-height: calc(100vh - 64px);
+    display: flex; align-items: center;
+    padding: 80px 60px;
+    position: relative;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 24px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .hero-eyebrow::before {
+    content: ''; width: 24px; height: 1px; background: var(--accent);
+  }
+  .hero h1 {
+    font-size: clamp(40px, 5vw, 68px);
+    font-weight: 700; line-height: 1.08;
+    margin-bottom: 24px; letter-spacing: -1.5px;
+    color: var(--text);
+  }
+  .hero h1 .highlight { color: var(--accent); }
+  .hero p {
+    font-size: 17px; color: var(--text-secondary);
+    line-height: 1.75; max-width: 480px; margin-bottom: 40px;
+    font-weight: 300;
+  }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero-actions .btn-ccfd { width: auto; }
+
+  /* Stats row */
+  .stats-row {
+    display: flex; gap: 48px; margin-top: 64px;
+    padding-top: 40px; border-top: 1px solid var(--card-border);
+  }
+  .stat-item .stat-num {
+    font-family: var(--mono); font-size: 28px; font-weight: 600;
+    color: var(--accent);
+  }
+  .stat-item .stat-label {
+    font-size: 12px; color: var(--text-muted);
+    margin-top: 4px; letter-spacing: 0.04em;
+  }
+
+  /* Right panel */
+  .hero-panel {
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 24px; width: 340px; flex-shrink: 0;
+  }
+  .panel-header {
+    font-family: var(--mono); font-size: 10px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted);
+    margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .panel-live { display: flex; align-items: center; gap: 6px; }
+  .tx-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 0; border-bottom: 1px solid var(--card-border);
+    font-size: 13px;
+  }
+  .tx-row:last-child { border: none; }
+  .tx-name { color: var(--text); }
+  .tx-amt { color: var(--text-muted); font-family: var(--mono); font-size: 12px; }
+
+  /* Feature section */
+  .features-section { padding: 80px 60px; }
+  .section-header { margin-bottom: 52px; }
+  .section-header .eyebrow {
+    font-family: var(--mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent);
+    margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+  }
+  .section-header .eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
+  .section-header h2 { font-size: 36px; font-weight: 700; letter-spacing: -0.5px; }
+
+  .feature-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+  .feature-card {
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 28px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .feature-card:hover { border-color: rgba(59,130,246,0.35); transform: translateY(-3px); }
+  .feature-num {
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    font-weight: 500; margin-bottom: 16px; letter-spacing: 0.08em;
+  }
+  .feature-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 10px; }
+  .feature-card p { color: var(--text-muted); font-size: 14px; line-height: 1.65; }
+
+  /* Model badges strip */
+  .model-strip {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px;
+  }
+  .model-tag {
+    font-family: var(--mono); font-size: 11px; padding: 4px 10px;
+    border-radius: 4px; background: var(--accent-dim);
+    color: var(--accent); border: 1px solid rgba(59,130,246,0.2);
+    font-weight: 500;
+  }
+</style>
+
+<div class="hero">
+  <div style="width:100%;">
+    <div class="row align-items-center">
+      <div class="col-lg-7 fade-in">
+        <div class="hero-eyebrow">AI-Powered Security Platform</div>
+        <h1>
+          Credit Card<br>
+          Fraud <span class="highlight">Detection</span>
+        </h1>
+        <p>Machine learning system that analyzes transaction patterns in real-time and classifies fraudulent activity with 96.58% accuracy.</p>
+        <div class="hero-actions">
+          {% if user.is_authenticated %}
+            <a href="/data" class="btn-ccfd btn-primary-ccfd">Run Prediction</a>
+          {% else %}
+            <a href="/register" class="btn-ccfd btn-primary-ccfd">Get Started</a>
+            <a href="/login" class="btn-ccfd btn-outline-ccfd">Sign In</a>
+          {% endif %}
+        </div>
+        <div class="stats-row">
+          <div class="stat-item">
+            <div class="stat-num">96.58%</div>
+            <div class="stat-label">Model Accuracy</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">4</div>
+            <div class="stat-label">ML Algorithms</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">7</div>
+            <div class="stat-label">Input Features</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5 d-none d-lg-flex justify-content-center fade-in-2">
+        <div class="hero-panel">
+          <div class="panel-header">
+            <span>Sample Transactions</span>
+            <span class="panel-live"><span class="status-dot"></span> Live</span>
+          </div>
+          <div class="tx-row">
+            <span class="tx-name">grocery_pos</span>
+            <span class="tx-amt">$107.23</span>
+            <span class="badge-ccfd badge-safe">Safe</span>
+          </div>
+          <div class="tx-row">
+            <span class="tx-name">misc_net</span>
+            <span class="tx-amt">$4.97</span>
+            <span class="badge-ccfd badge-safe">Safe</span>
+          </div>
+          <div class="tx-row">
+            <span class="tx-name">shopping_net</span>
+            <span class="tx-amt">$9,000.00</span>
+            <span class="badge-ccfd badge-fraud">Fraud</span>
+          </div>
+          <div class="tx-row">
+            <span class="tx-name">food_dining</span>
+            <span class="tx-amt">$32.50</span>
+            <span class="badge-ccfd badge-safe">Safe</span>
+          </div>
+          <div class="tx-row">
+            <span class="tx-name">travel</span>
+            <span class="tx-amt">$640.00</span>
+            <span class="badge-ccfd badge-fraud">Fraud</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="features-section">
+  <div class="section-header fade-in">
+    <div class="eyebrow">How It Works</div>
+    <h2>Fraud detection powered by<br>machine learning</h2>
+  </div>
+  <div class="feature-grid">
+    <div class="feature-card fade-in">
+      <div class="feature-num">01</div>
+      <h3>Real-time Analysis</h3>
+      <p>Submit transaction details and receive an immediate classification — Fraud or No Fraud — using a trained Random Forest model.</p>
+    </div>
+    <div class="feature-card fade-in-2">
+      <div class="feature-num">02</div>
+      <h3>96.58% Accuracy</h3>
+      <p>Trained on real credit card data using 7 features: category, amount, location coordinates, merchant location, and occupation.</p>
+      <div class="model-strip">
+        <span class="model-tag">Random Forest</span>
+        <span class="model-tag">KNN</span>
+        <span class="model-tag">Naive Bayes</span>
+        <span class="model-tag">Logistic Regression</span>
+      </div>
+    </div>
+    <div class="feature-card fade-in-3">
+      <div class="feature-num">03</div>
+      <h3>Visual Insights</h3>
+      <p>After each prediction, view fraud distribution charts, model accuracy comparisons, and top fraud occupation profiles.</p>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

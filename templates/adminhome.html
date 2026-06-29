@@ -1,0 +1,136 @@
+{% extends "nav.html" %}
+{% block content %}
+<style>
+  .admin-wrap { padding: 48px 40px; max-width: 1200px; margin: 0 auto; }
+  .admin-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:36px; }
+  .admin-eyebrow {
+    font-family: var(--mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .admin-header h2 { font-size: 30px; font-weight: 700; letter-spacing: -0.5px; }
+
+  /* Stat cards */
+  .stat-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:28px; }
+  .stat-c {
+    background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:22px;
+  }
+  .stat-c .sc-num {
+    font-family: var(--mono); font-size:32px; font-weight:600; line-height:1;
+  }
+  .stat-c .sc-label { font-size:12px; color:var(--text-muted); margin-top:6px; letter-spacing:0.04em; }
+
+  /* Table */
+  .table-wrap { background:var(--card); border:1px solid var(--card-border); border-radius:12px; overflow:hidden; }
+  .table-header {
+    padding: 16px 24px; border-bottom: 1px solid var(--card-border);
+    font-family: var(--mono); font-size: 11px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  table { width:100%; border-collapse:collapse; }
+  thead th {
+    padding: 12px 20px; text-align: left;
+    font-family: var(--mono); font-size: 10px; font-weight: 600;
+    text-transform:uppercase; letter-spacing:0.1em; color:var(--text-muted);
+    border-bottom: 1px solid var(--card-border);
+    background: rgba(255,255,255,0.02);
+  }
+  tbody tr { border-bottom: 1px solid var(--card-border); transition: background 0.15s; }
+  tbody tr:last-child { border: none; }
+  tbody tr:hover { background: rgba(255,255,255,0.015); }
+  tbody td { padding: 13px 20px; font-size: 13px; }
+  .row-num { font-family: var(--mono); font-size:11px; color:var(--text-muted); }
+  .cat-tag {
+    font-family: var(--mono); font-size:12px;
+    background: var(--accent-dim); color: var(--accent);
+    padding: 3px 8px; border-radius: 4px;
+  }
+  .empty-state { text-align:center; padding:72px 40px; color:var(--text-muted); }
+  .empty-state .es-icon {
+    width: 48px; height: 48px; border-radius: 10px;
+    background: var(--card); border: 1px solid var(--card-border);
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .empty-state .es-icon svg { width: 22px; height: 22px; stroke: var(--text-muted); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .empty-state p { font-size: 14px; }
+</style>
+
+<div class="admin-wrap">
+  <div class="admin-header fade-in">
+    <div>
+      <div class="admin-eyebrow">Admin Dashboard</div>
+      <h2>Prediction History</h2>
+    </div>
+    <a href="/logout" class="btn-ccfd btn-outline-ccfd" style="width:auto;">Logout</a>
+  </div>
+
+  <div class="stat-cards fade-in-2">
+    <div class="stat-c">
+      <div class="sc-num">{{cc|length}}</div>
+      <div class="sc-label">Total Predictions</div>
+    </div>
+    <div class="stat-c">
+      <div class="sc-num" style="color:var(--danger);">
+        {% with count=0 %}
+          {% for c in cc %}{% if c.prediction == "Fraud" %}{{ forloop.counter }}{% endif %}{% endfor %}
+        {% endwith %}
+      </div>
+      <div class="sc-label">Fraud Cases</div>
+    </div>
+    <div class="stat-c">
+      <div class="sc-num" style="color:var(--success);">96.58%</div>
+      <div class="sc-label">Model Accuracy</div>
+    </div>
+  </div>
+
+  <div class="table-wrap fade-in-3">
+    <div class="table-header">
+      <span>All Records</span>
+      <span>{{cc|length}} entries</span>
+    </div>
+    {% if cc %}
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Category</th>
+          <th>Amount</th>
+          <th>Location</th>
+          <th>Merchant</th>
+          <th>Occupation</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in cc %}
+        <tr>
+          <td class="row-num">{{forloop.counter}}</td>
+          <td><span class="cat-tag">{{c.category}}</span></td>
+          <td style="font-family:var(--mono); font-size:13px;">${{c.amount}}</td>
+          <td style="font-family:var(--mono); font-size:11px; color:var(--text-muted);">{{c.latitude}}, {{c.longitude}}</td>
+          <td style="font-family:var(--mono); font-size:11px; color:var(--text-muted);">{{c.merchant_latitude}}, {{c.merchant_longitude}}</td>
+          <td style="font-size:13px;">{{c.jobs}}</td>
+          <td>
+            {% if c.prediction == "Fraud" %}
+              <span class="badge-ccfd badge-fraud">Fraud</span>
+            {% else %}
+              <span class="badge-ccfd badge-safe">Safe</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+      <div class="es-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+      </div>
+      <p>No predictions recorded yet. Results will appear here once users run detections.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

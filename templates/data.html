@@ -1,0 +1,112 @@
+{% extends "nav.html" %}
+{% block content %}
+<style>
+  .predict-wrap {
+    min-height: calc(100vh - 64px);
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 60px 20px;
+  }
+  .predict-box { width: 100%; max-width: 700px; }
+  .form-group-sp { margin-bottom: 20px; }
+  .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .predict-header { margin-bottom: 36px; }
+  .predict-eyebrow {
+    font-family: var(--mono); font-size: 11px; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent);
+    margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+  }
+  .predict-eyebrow::before { content: ''; width: 20px; height: 1px; background: var(--accent); }
+  .predict-header h2 { font-size: 30px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
+  .predict-header p { color: var(--text-muted); font-size: 14px; }
+  .info-tip {
+    background: var(--accent-dim); border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 6px; padding: 10px 14px;
+    font-size: 12px; color: var(--accent); margin-bottom: 24px;
+    font-family: var(--mono); line-height: 1.6;
+  }
+  .submit-row { margin-top: 20px; }
+</style>
+
+<div class="predict-wrap">
+  <div class="predict-box fade-in">
+    <div class="predict-header">
+      <div class="predict-eyebrow">Prediction Engine</div>
+      <h2>Fraud Prediction</h2>
+      <p>Enter transaction details below to classify the transaction.</p>
+    </div>
+
+    <div class="info-tip">
+      Use exact category values — e.g. misc_net, grocery_pos, shopping_net — for accurate results.
+    </div>
+
+    <div class="ccfd-card">
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="section-divider">Transaction</div>
+        <div class="form-grid-2">
+          <div class="form-group-sp">
+            <label class="form-label-sm">Category</label>
+            <select name="cat" class="form-control-ccfd">
+              <option value="misc_net">misc_net</option>
+              <option value="grocery_pos">grocery_pos</option>
+              <option value="entertainment">entertainment</option>
+              <option value="gas_transport">gas_transport</option>
+              <option value="misc_pos">misc_pos</option>
+              <option value="grocery_net">grocery_net</option>
+              <option value="shopping_net">shopping_net</option>
+              <option value="shopping_pos">shopping_pos</option>
+              <option value="food_dining">food_dining</option>
+              <option value="personal_care">personal_care</option>
+              <option value="health_fitness">health_fitness</option>
+              <option value="travel">travel</option>
+              <option value="kids_pets">kids_pets</option>
+              <option value="home">home</option>
+            </select>
+          </div>
+          <div class="form-group-sp">
+            <label class="form-label-sm">Amount (USD)</label>
+            <input type="number" step="0.01" name="amt" class="form-control-ccfd" placeholder="e.g. 150.00" required>
+          </div>
+        </div>
+
+        <div class="section-divider">Cardholder Location</div>
+        <div class="form-grid-2">
+          <div class="form-group-sp">
+            <label class="form-label-sm">Latitude</label>
+            <input type="number" step="any" name="lat" class="form-control-ccfd" placeholder="e.g. 36.0" required>
+          </div>
+          <div class="form-group-sp">
+            <label class="form-label-sm">Longitude</label>
+            <input type="number" step="any" name="long" class="form-control-ccfd" placeholder="e.g. -81.0" required>
+          </div>
+        </div>
+
+        <div class="section-divider">Merchant Location</div>
+        <div class="form-grid-2">
+          <div class="form-group-sp">
+            <label class="form-label-sm">Merchant Latitude</label>
+            <input type="number" step="any" name="mlat" class="form-control-ccfd" placeholder="e.g. 36.1" required>
+          </div>
+          <div class="form-group-sp">
+            <label class="form-label-sm">Merchant Longitude</label>
+            <input type="number" step="any" name="mlong" class="form-control-ccfd" placeholder="e.g. -81.2" required>
+          </div>
+        </div>
+
+        <div class="section-divider">Cardholder Profile</div>
+        <div class="form-group-sp">
+          <label class="form-label-sm">Occupation / Job</label>
+          <input type="text" name="job" class="form-control-ccfd" placeholder="e.g. Psychologist, counselling" required>
+        </div>
+
+        <div class="submit-row">
+          <button type="submit" class="btn-ccfd btn-primary-ccfd" style="font-size:15px; padding:13px;">
+            Run Fraud Detection
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

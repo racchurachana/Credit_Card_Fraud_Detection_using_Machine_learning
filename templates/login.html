@@ -1,0 +1,60 @@
+{% extends "nav.html" %}
+{% block content %}
+<style>
+  .auth-wrap {
+    min-height: calc(100vh - 64px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 40px 20px;
+  }
+  .auth-box { width: 100%; max-width: 420px; }
+  .form-group-sp { margin-bottom: 20px; }
+  .auth-footer { text-align: center; margin-top: 24px; font-size: 13px; color: var(--text-muted); }
+  .auth-footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .auth-heading { text-align: center; margin-bottom: 32px; }
+  .auth-icon {
+    width: 48px; height: 48px; border: 1.5px solid var(--card-border);
+    border-radius: 10px; display: inline-flex; align-items: center;
+    justify-content: center; margin-bottom: 16px;
+  }
+  .auth-icon svg { width: 22px; height: 22px; stroke: var(--accent); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .auth-title { font-size: 26px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.5px; }
+  .auth-sub { color: var(--text-muted); font-size: 14px; }
+</style>
+
+<div class="auth-wrap">
+  <div class="auth-box fade-in">
+    <div class="auth-heading">
+      <div class="auth-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <div class="auth-title">Sign In</div>
+      <div class="auth-sub">Access your fraud detection account</div>
+    </div>
+
+    {% for m in messages %}
+      <div class="alert-ccfd">{{ m }}</div>
+    {% endfor %}
+
+    <div class="ccfd-card">
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group-sp">
+          <label class="form-label-sm">Username</label>
+          <input type="text" name="uname" class="form-control-ccfd" placeholder="Enter your username" required>
+        </div>
+        <div class="form-group-sp">
+          <label class="form-label-sm">Password</label>
+          <input type="password" name="psw" class="form-control-ccfd" placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="btn-ccfd btn-primary-ccfd" style="margin-top:8px;">
+          Sign In
+        </button>
+      </form>
+    </div>
+
+    <div class="auth-footer">
+      No account? <a href="/register">Create one</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

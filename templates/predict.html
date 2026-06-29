@@ -1,0 +1,202 @@
+{% extends "nav.html" %}
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  .result-wrap { padding: 60px 40px; max-width: 1100px; margin: 0 auto; }
+
+  /* Result banner */
+  .result-banner {
+    border-radius: 12px; padding: 32px 36px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 28px;
+    border: 1px solid;
+  }
+  .banner-fraud {
+    background: var(--danger-dim);
+    border-color: rgba(239,68,68,0.25);
+  }
+  .banner-safe {
+    background: var(--success-dim);
+    border-color: rgba(34,197,94,0.25);
+  }
+  .banner-icon-wrap {
+    width: 56px; height: 56px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .banner-icon-wrap svg { width: 28px; height: 28px; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+  .banner-icon-fraud { background: rgba(239,68,68,0.15); }
+  .banner-icon-fraud svg { stroke: var(--danger); }
+  .banner-icon-safe { background: rgba(34,197,94,0.15); }
+  .banner-icon-safe svg { stroke: var(--success); }
+  .banner-body { flex: 1; padding: 0 24px; }
+  .banner-body h2 { font-size: 26px; font-weight: 700; margin-bottom: 5px; letter-spacing: -0.5px; }
+  .banner-body p { font-size: 14px; color: var(--text-muted); }
+  .banner-acc { text-align: right; font-family: var(--mono); flex-shrink: 0; }
+  .banner-acc .acc-num { font-size: 36px; font-weight: 600; }
+  .banner-acc .acc-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+
+  /* Detail chips */
+  .detail-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 28px; }
+  .detail-chip {
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: 8px; padding: 14px 18px;
+  }
+  .detail-chip .dc-label { font-family: var(--mono); font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px; }
+  .detail-chip .dc-val { font-size: 14px; font-weight: 600; }
+
+  /* Charts */
+  .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .chart-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; padding: 24px; }
+  .chart-card h4 {
+    font-size: 13px; font-weight: 600; margin-bottom: 20px; color: var(--text-secondary);
+    font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .chart-full { margin-bottom: 20px; }
+  .back-row { text-align: center; margin-top: 40px; }
+</style>
+
+<div class="result-wrap">
+
+  {% if prediction_data == "Fraud" %}
+  <div class="result-banner banner-fraud fade-in">
+    <div class="banner-icon-wrap banner-icon-fraud">
+      <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </div>
+    <div class="banner-body">
+      <h2 style="color:var(--danger);">Fraud Detected</h2>
+      <p>This transaction shows indicators of fraudulent activity. Review and take action.</p>
+    </div>
+    <div class="banner-acc" style="color:var(--danger);">
+      <div class="acc-num">{{accuracy}}%</div>
+      <div class="acc-label">Model Accuracy</div>
+    </div>
+  </div>
+  {% else %}
+  <div class="result-banner banner-safe fade-in">
+    <div class="banner-icon-wrap banner-icon-safe">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+    </div>
+    <div class="banner-body">
+      <h2 style="color:var(--success);">Transaction Safe</h2>
+      <p>No fraud indicators detected. This appears to be a legitimate transaction.</p>
+    </div>
+    <div class="banner-acc" style="color:var(--success);">
+      <div class="acc-num">{{accuracy}}%</div>
+      <div class="acc-label">Model Accuracy</div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Detail chips -->
+  <div class="detail-grid fade-in-2">
+    <div class="detail-chip">
+      <div class="dc-label">Category</div>
+      <div class="dc-val">{{category}}</div>
+    </div>
+    <div class="detail-chip">
+      <div class="dc-label">Amount</div>
+      <div class="dc-val">${{amount}}</div>
+    </div>
+    <div class="detail-chip">
+      <div class="dc-label">Location</div>
+      <div class="dc-val" style="font-size:12px; font-family:var(--mono);">{{latitude}}, {{longitude}}</div>
+    </div>
+    <div class="detail-chip">
+      <div class="dc-label">Merchant</div>
+      <div class="dc-val" style="font-size:12px; font-family:var(--mono);">{{mlatitude}}, {{mlongitude}}</div>
+    </div>
+    <div class="detail-chip" style="grid-column:span 2;">
+      <div class="dc-label">Occupation</div>
+      <div class="dc-val">{{job}}</div>
+    </div>
+    <div class="detail-chip" style="grid-column:span 2;">
+      <div class="dc-label">Prediction Result</div>
+      <div class="dc-val" style="color:{% if prediction_data == 'Fraud' %}var(--danger){% else %}var(--success){% endif %};">
+        {{prediction_data}}
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="chart-grid fade-in-3">
+    <div class="chart-card">
+      <h4>Fraud Distribution</h4>
+      <canvas id="pieChart" height="220"></canvas>
+    </div>
+    <div class="chart-card">
+      <h4>Model Accuracy Comparison</h4>
+      <canvas id="modelChart" height="220"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-card chart-full fade-in-4">
+    <h4>Top 10 Occupations — Fraud Transactions</h4>
+    <canvas id="barChart" height="100"></canvas>
+  </div>
+
+  <div class="back-row">
+    <a href="/data" class="btn-ccfd btn-outline-ccfd" style="width:auto; padding:12px 40px;">
+      Predict Another Transaction
+    </a>
+  </div>
+</div>
+
+<script>
+Chart.defaults.color = '#64748b';
+Chart.defaults.font.family = "'IBM Plex Sans', sans-serif";
+
+new Chart(document.getElementById('pieChart'), {
+  type: 'doughnut',
+  data: {
+    labels: {{ pie_labels|safe }},
+    datasets: [{ data: {{ pie_values|safe }},
+      backgroundColor: ['#22c55e','#ef4444'],
+      borderWidth: 0, hoverOffset: 4
+    }]
+  },
+  options: {
+    cutout: '68%',
+    plugins: { legend: { position:'bottom', labels:{ color:'#64748b', padding:16, font:{size:12} } } }
+  }
+});
+
+new Chart(document.getElementById('barChart'), {
+  type: 'bar',
+  data: {
+    labels: {{ bar_labels|safe }},
+    datasets: [{ data: {{ bar_values|safe }},
+      backgroundColor: 'rgba(239,68,68,0.6)',
+      borderRadius: 4, borderSkipped: false
+    }]
+  },
+  options: {
+    plugins: { legend: { display:false } },
+    scales: {
+      y: { beginAtZero:true, grid:{ color:'rgba(255,255,255,0.04)' }, ticks:{ color:'#64748b', font:{size:11} } },
+      x: { grid:{ display:false }, ticks:{ color:'#64748b', maxRotation:30, font:{size:11} } }
+    }
+  }
+});
+
+new Chart(document.getElementById('modelChart'), {
+  type: 'bar',
+  data: {
+    labels: {{ model_names|safe }},
+    datasets: [{ data: {{ model_scores|safe }},
+      backgroundColor: ['rgba(59,130,246,0.65)','rgba(99,102,241,0.65)','rgba(245,158,11,0.65)','rgba(34,197,94,0.65)'],
+      borderRadius: 6, borderSkipped: false
+    }]
+  },
+  options: {
+    plugins: { legend: { display:false } },
+    scales: {
+      y: { beginAtZero:true, max:100, grid:{ color:'rgba(255,255,255,0.04)' }, ticks:{ color:'#64748b', callback: v => v+'%', font:{size:11} } },
+      x: { grid:{ display:false }, ticks:{ color:'#64748b', font:{size:11} } }
+    }
+  }
+});
+</script>
+
+{% for i in messages %}<script>alert("{{i}}")</script>{% endfor %}
+{% endblock %}

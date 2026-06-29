@@ -1,0 +1,81 @@
+{% extends "nav.html" %}
+{% block content %}
+<style>
+  .auth-wrap {
+    min-height: calc(100vh - 64px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 40px 20px;
+  }
+  .auth-box { width: 100%; max-width: 500px; }
+  .form-group-sp { margin-bottom: 20px; }
+  .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .auth-footer { text-align: center; margin-top: 24px; font-size: 13px; color: var(--text-muted); }
+  .auth-footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .auth-heading { text-align: center; margin-bottom: 32px; }
+  .auth-icon {
+    width: 48px; height: 48px; border: 1.5px solid var(--card-border);
+    border-radius: 10px; display: inline-flex; align-items: center;
+    justify-content: center; margin-bottom: 16px;
+  }
+  .auth-icon svg { width: 22px; height: 22px; stroke: var(--accent); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .auth-title { font-size: 26px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.5px; }
+  .auth-sub { color: var(--text-muted); font-size: 14px; }
+</style>
+
+<div class="auth-wrap">
+  <div class="auth-box fade-in">
+    <div class="auth-heading">
+      <div class="auth-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <div class="auth-title">Create Account</div>
+      <div class="auth-sub">Join to start detecting fraud</div>
+    </div>
+
+    {% for m in messages %}
+      <div class="alert-ccfd">{{ m }}</div>
+    {% endfor %}
+
+    <div class="ccfd-card">
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-row-2">
+          <div class="form-group-sp">
+            <label class="form-label-sm">First Name</label>
+            <input type="text" name="fname" class="form-control-ccfd" placeholder="John" required>
+          </div>
+          <div class="form-group-sp">
+            <label class="form-label-sm">Last Name</label>
+            <input type="text" name="lname" class="form-control-ccfd" placeholder="Doe" required>
+          </div>
+        </div>
+        <div class="form-group-sp">
+          <label class="form-label-sm">Username</label>
+          <input type="text" name="uname" class="form-control-ccfd" placeholder="johndoe123" required>
+        </div>
+        <div class="form-group-sp">
+          <label class="form-label-sm">Email Address</label>
+          <input type="email" name="email" class="form-control-ccfd" placeholder="john@example.com" required>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group-sp">
+            <label class="form-label-sm">Password</label>
+            <input type="password" name="psw" class="form-control-ccfd" placeholder="Password" required>
+          </div>
+          <div class="form-group-sp">
+            <label class="form-label-sm">Confirm Password</label>
+            <input type="password" name="psw1" class="form-control-ccfd" placeholder="Repeat" required>
+          </div>
+        </div>
+        <button type="submit" class="btn-ccfd btn-primary-ccfd" style="margin-top:8px;">
+          Create Account
+        </button>
+      </form>
+    </div>
+
+    <div class="auth-footer">
+      Already have an account? <a href="/login">Sign in</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
