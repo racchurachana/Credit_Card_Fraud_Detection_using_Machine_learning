@@ -73,15 +73,15 @@ CreditCard/
 
 ---
 
-## ⚙️ Installation
+##  Installation
 
 ### 1. Clone Repository
 
-git clone https://github.com/your-username/CreditCard_fixed.git
+git clone https://github.com/racchurachana/CreditCard_fixed.git
 
 ### 2. Go to Project Folder
 
-cd CreditCard_fixed
+cd CreditCard
 
 ### 3. Create Virtual Environment
 
@@ -97,12 +97,6 @@ source venv/bin/activate
 
 ### 4. Install Dependencies
 
-pip install django
-pip install pandas
-pip install numpy
-pip install scikit-learn
-
-Or
 pip install -r requirements.txt
 
 ---
@@ -120,6 +114,6 @@ http://127.0.0.1:8000/
 
 ---
 
-## 👩‍💻 Developed By
+##  Developed By
 
 **Rachana H B - MCA, Presidency University, Bengaluru
